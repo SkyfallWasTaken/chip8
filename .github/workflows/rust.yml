@@ -1,0 +1,44 @@
+name: Rust Code Quality Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          components: rustfmt, clippy
+          profile: minimal
+
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v1
+
+      - name: Check formatting
+        run: cargo fmt -- --check
+        env:
+          RUSTFLAGS: "-D warnings"
+
+      - name: Run Clippy lints
+        run: cargo clippy --all-features -- -D clippy::all
+        env:
+          RUSTFLAGS: "-D warnings"
+
+      - name: Run tests
+        uses: jacderida/cargo-nextest@initial
+        with:
+          profile: ci
+          test-run-name: test-run
+          junit-path: junit.xml
