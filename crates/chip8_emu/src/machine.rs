@@ -2,6 +2,7 @@ use ndarray::Array2;
 
 use crate::font;
 
+/// The CHIP-8 machine emulator. Contains memory, display etc.
 pub struct Machine {
     /// Writeable memory - 4096 bytes.
     ///
