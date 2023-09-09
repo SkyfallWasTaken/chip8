@@ -36,9 +36,12 @@ jobs:
       env:
         RUSTFLAGS: -D warnings
 
-    - name: Run tests
+    - name: Run non doc-tests with nextest
       uses: jacderida/cargo-nextest@initial
       with:
         profile: ci
         test-run-name: test-run
         junit-path: junit.xml
+
+    - name: Run doc-tests
+      run: cargo test --doc
