@@ -1,12 +1,10 @@
-[package]
-name = "chip8_emu"
-version = "0.1.0"
-edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 ndarray = "0.15.6"
 
 [dev-dependencies]
 pretty_assertions = "1.4.0"
+
+[package]
+edition = "2021"
+name = "chip8_emu"
+version = "0.1.0"
