@@ -39,6 +39,6 @@ jobs:
     - name: Run tests
       uses: jacderida/cargo-nextest@initial
       with:
-        profile: ci
+        profile: debug
         test-run-name: test-run
         junit-path: junit.xml
