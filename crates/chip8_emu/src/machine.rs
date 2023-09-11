@@ -2,12 +2,19 @@ use ndarray::Array2;
 
 use crate::font;
 
+/// Most emulators expect a game to be loaded into memory after it,
+/// starting at address `0x200` (512 in decimal).
+///
+/// We also start at `0x200` for compatibility with games that expect
+/// themselves to start there.
+pub const GAME_MEM_START: usize = 0x200;
+
 /// The CHIP-8 machine emulator. Contains memory, display etc.
 pub struct Machine {
     /// Writeable memory - 4096 bytes.
     ///
     /// Addresses start from `000` to `1FF`.
-    /// A CHIP-8 program starts at `200`.
+    /// A CHIP-8 game should be loaded from `machine::GAME_MEM_START`.
     pub memory: Vec<u8>,
 
     /// A 64x32 pixel display - each pixel is either _on_ or _off_.
@@ -46,8 +53,9 @@ impl Default for Machine {
     fn default() -> Self {
         let mut machine = Self {
             memory: vec![0; 4096],
+            // TODO: remove magic number
             display: Array2::<bool>::from_elem((64, 32), false),
-            stack: Vec::with_capacity(16),
+            stack: Vec::with_capacity(16), // 16 is usually enough for most games
             delay_timer: 0,
             sound_timer: 0,
         };
@@ -62,6 +70,22 @@ impl Default for Machine {
 }
 
 impl Machine {
+    // TODO: consider using slices instead
+    // TODO: docs
+    /// Takes a `Vec<u8>` of game bytes, loads it into memory, and returns the machine.
+    ///
+    /// ## Example
+    /// ```rust
+    /// use chip8_emu::machine::Machine;
+    ///
+    /// let machine = Machine::default()
+    ///     .load_game(std::fs::read("pong.ch8").unwrap());
+    /// ```
+    pub fn load_game(&mut self, game: Vec<u8>) -> &mut Machine {
+        self.memory[GAME_MEM_START..GAME_MEM_START + game.len()].copy_from_slice(&game);
+        self
+    }
+
     /// An utility function to check if the emulator should beep
     /// or otherwise make a sound.
     ///
