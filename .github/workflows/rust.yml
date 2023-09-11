@@ -39,7 +39,7 @@ jobs:
     - name: Run non doc-tests with nextest
       uses: jacderida/cargo-nextest@initial
       with:
-        profile: debug
+        profile: default
         test-run-name: test-run
         junit-path: junit.xml
 
