@@ -37,11 +37,9 @@ jobs:
         RUSTFLAGS: -D warnings
 
     - name: Run non doc-tests with nextest
-      uses: jacderida/cargo-nextest@initial
+      uses: taiki-e/install-action@v2
       with:
-        profile: default
-        test-run-name: test-run
-        junit-path: junit.xml
+        tool: nextest
 
     - name: Run doc-tests
       run: cargo test --doc
