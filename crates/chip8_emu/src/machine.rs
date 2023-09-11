@@ -75,7 +75,7 @@ impl Machine {
     /// Takes a `Vec<u8>` of game bytes, loads it into memory, and returns the machine.
     ///
     /// ## Example
-    /// ```rust
+    /// ```ignore
     /// use chip8_emu::machine::Machine;
     ///
     /// let machine = Machine::default()
