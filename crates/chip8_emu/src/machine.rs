@@ -79,7 +79,7 @@ impl Machine {
     /// use chip8_emu::machine::Machine;
     ///
     /// let machine = Machine::default()
-    ///     .load_game(std::fs::read("pong.ch8").unwrap());
+    ///     .load_game(std::fs::read("./roms/ch8_logo.ch8").unwrap());
     /// ```
     pub fn load_game(&mut self, game: Vec<u8>) -> &mut Machine {
         self.memory[GAME_MEM_START..GAME_MEM_START + game.len()].copy_from_slice(&game);
