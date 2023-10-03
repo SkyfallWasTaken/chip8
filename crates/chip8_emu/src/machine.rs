@@ -47,6 +47,16 @@ pub struct Machine {
     /// }
     /// ```
     pub sound_timer: u8,
+
+    /// Points to the current instruction in memory.
+    pub pc: usize,
+
+    /// 16 8-bit (one byte) general-purpose variable registers numbered 0 through F
+    /// hexadecimal, ie. 0 through 15 in decimal, called V0 through VF
+    ///
+    /// VF is also used as a flag register; many instructions will set it to either 1
+    /// or 0 based on some rule, for example using it as a carry flag
+    pub registers: Vec<u8>
 }
 
 impl Default for Machine {
@@ -58,6 +68,9 @@ impl Default for Machine {
             stack: Vec::with_capacity(16), // 16 is usually enough for most games
             delay_timer: 0,
             sound_timer: 0,
+            // FIXME: maybe wrong? idk
+            pc: GAME_MEM_START,
+            registers: vec![0; 16]
         };
 
         // Let's copy the font into memory
@@ -110,7 +123,7 @@ mod test {
     fn font_is_copied_into_memory() {
         let machine = Machine::default();
         // TODO: check more exhaustively
-        assert_eq!(machine.memory[font::START], font::VALUES[0])
+        assert_eq!(machine.memory[font::START..font::START + font::VALUES.len()], font::VALUES)
     }
 
     #[test]
@@ -126,5 +139,17 @@ mod test {
         let machine = Machine::default();
         assert_eq!(machine.delay_timer, 0, "delay timer should be zero");
         assert_eq!(machine.sound_timer, 0, "sound timer should be zero");
+    }
+
+    #[test]
+    fn pc_starts_at_game_start_location() {
+        let machine = Machine::default();
+        assert_eq!(machine.pc, GAME_MEM_START, "program counter should start at GAME_MEM_START");
+    }
+
+    #[test]
+    fn total_register_count_is_sixteen() {
+        let machine = Machine::default();
+        assert_eq!(machine.registers.len(), 16);
     }
 }
