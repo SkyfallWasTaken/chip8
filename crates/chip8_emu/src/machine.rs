@@ -56,7 +56,7 @@ pub struct Machine {
     ///
     /// VF is also used as a flag register; many instructions will set it to either 1
     /// or 0 based on some rule, for example using it as a carry flag
-    pub registers: Vec<u8>
+    pub registers: Vec<u8>,
 }
 
 impl Default for Machine {
@@ -70,7 +70,7 @@ impl Default for Machine {
             sound_timer: 0,
             // FIXME: maybe wrong? idk
             pc: GAME_MEM_START,
-            registers: vec![0; 16]
+            registers: vec![0; 16],
         };
 
         // Let's copy the font into memory
@@ -123,7 +123,10 @@ mod test {
     fn font_is_copied_into_memory() {
         let machine = Machine::default();
         // TODO: check more exhaustively
-        assert_eq!(machine.memory[font::START..font::START + font::VALUES.len()], font::VALUES)
+        assert_eq!(
+            machine.memory[font::START..font::START + font::VALUES.len()],
+            font::VALUES
+        )
     }
 
     #[test]
@@ -144,7 +147,10 @@ mod test {
     #[test]
     fn pc_starts_at_game_start_location() {
         let machine = Machine::default();
-        assert_eq!(machine.pc, GAME_MEM_START, "program counter should start at GAME_MEM_START");
+        assert_eq!(
+            machine.pc, GAME_MEM_START,
+            "program counter should start at GAME_MEM_START"
+        );
     }
 
     #[test]
